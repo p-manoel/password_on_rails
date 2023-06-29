@@ -20,6 +20,14 @@ class PasswordsController < ApplicationController
         end
     end
 
+    def update
+        if @password.update(password_params)
+            redirect_to @password, notice: "Password updated!"
+        else
+            render :edit, status: :unprocessable_entity
+        end
+    end
+
     private
 
     def password_params
