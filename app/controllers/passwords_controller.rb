@@ -28,6 +28,11 @@ class PasswordsController < ApplicationController
         end
     end
 
+    def destroy
+        @password.destroy
+        redirect_to passwords_path, notice: "Password deleted!"
+    end
+
     private
 
     def password_params
