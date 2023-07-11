@@ -1,32 +1,57 @@
 <div class="container mx-auto px-4">
-  <h1 class="text-3xl font-bold mb-4 text-center">
-    <div class="inline-flex items-center justify-center">
-      <%= @password.url %>
-      <%= link_to @password.url, target: "_blank", rel: "noopener noreferrer" do %>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-500 w-6 h-6 ml-2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-        </svg>
-      <% end %>
-    </div>
-  </h1>
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-4 text-center">
+      <div class="inline-flex items-center justify-center">
+        <%= @password.url %>
+        <%= link_to @password.url, target: "_blank", rel: "noopener noreferrer" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-500 w-6 h-6 ml-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
+      </div>
+    </h1>
 
-  <div class="text-center mb-4">
-    <%= link_to "Edit", edit_password_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block" %>
-  </div>
-
-  <div class="bg-white shadow rounded-lg p-6">
-    <h6 class="font-bold text-gray-700 mb-2">Username / Email</h6>
-        <div class="flex items-center gap-1">
-      <pre class="bg-gray-100 rounded p-4 my-0 flex-grow"><code><%= @password.username %></code></pre>
-      <%= button_tag "Copy", class: 'clipboard-button px-5 py-2.5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded', 'data-text': @password.username %>
-    </div>
-
-    <h6 class="font-bold text-gray-700 mb-2">Password</h6>
-    <div class="flex items-center gap-1">
-      <pre class="bg-gray-100 rounded p-4 my-0 flex-grow"><code><%= @password.password %></code></pre>
-      <%= button_tag "Copy", class: 'clipboard-button px-5 py-2.5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded', 'data-text': @password.password %>
+    <div class="text-center">
+      <%= link_to "Edit", edit_password_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block" %>
     </div>
   </div>
+
+  <div class="bg-white shadow rounded-lg p-6 mb-8">
+    <h2 class="text-xl font-bold mb-4">Credentials</h2>
+
+    <div class="flex flex-col mb-4">
+      <label for="username" class="mb-1">Username:</label>
+      <div class="flex items-center gap-1">
+        <pre class="bg-gray-100 rounded p-4 my-0 flex-grow"><code><%= @password.username %></code></pre>
+        <%= button_tag "Copy", class: 'clipboard-button px-5 py-2.5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded', 'data-text': @password.username %>
+      </div>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="password" class="mb-1">Password:</label>
+      <div class="flex items-center gap-1">
+        <pre class="bg-gray-100 rounded p-4 my-0 flex-grow"><code><%= @password.password %></code></pre>
+        <%= button_tag "Copy", class: 'clipboard-button px-5 py-2.5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded', 'data-text': @password.password %>
+      </div>
+    </div>
+  </div>
+
+<div class="bg-white shadow rounded-lg p-6">
+  <h2 class="text-xl font-bold mb-4">Shares</h2>
+
+  <ul class="list-disc pl-6 mb-4">
+    <% @password.users.excluding(current_user).each do |user| %>
+      <li class="flex items-center justify-between">
+        <%= user.email %>
+        <%= button_to 'Remove', password_share_path(@password, user), method: :delete, class: 'text-red-500 ml-2' %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= link_to 'Add User', new_password_share_path(@password), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block' %>
+</div>
+
+
 
   <div class="text-center">
     <%= link_to 'Back', passwords_path, class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block' %>
