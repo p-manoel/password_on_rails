@@ -11,9 +11,11 @@
       </div>
     </h1>
 
-    <div class="text-center">
-      <%= link_to "Edit", edit_password_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block" %>
-    </div>
+    <% if   user_password.editable? %>
+      <div class="text-center">
+        <%= link_to "Edit", edit_password_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="bg-white shadow rounded-lg p-6 mb-8">
@@ -40,18 +42,17 @@
   <h2 class="text-xl font-bold mb-4">Shares</h2>
 
   <ul class="list-disc pl-6 mb-4">
-    <% @password.users.excluding(current_user).each do |user| %>
+    <% @password.user_passwords.includes(:user).each do |user_password| %>
       <li class="flex items-center justify-between">
-        <%= user.email %>
-        <%= button_to 'Remove', password_share_path(@password, user), method: :delete, class: 'text-red-500 ml-2' %>
+        <%= user_password.user.email %>
+        <%= user_password.role.titleize %>
+        <%= button_to 'Remove', password_share_path(@password, user_password.user), method: :delete, class: 'text-red-500 ml-2' if user_password.deletable? %>
       </li>
     <% end %>
   </ul>
 
-  <%= link_to 'Add User', new_password_share_path(@password), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block' %>
+  <%= link_to 'Add User', new_password_share_path(@password), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block' if user_password.shareable? %>
 </div>
-
-
 
   <div class="text-center">
     <%= link_to 'Back', passwords_path, class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block' %>
