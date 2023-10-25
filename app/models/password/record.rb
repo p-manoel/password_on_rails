@@ -4,8 +4,15 @@ module Password
   class Record < ApplicationRecord
     self.table_name = 'passwords'
 
-    has_many :user_passwords, dependent: :destroy
-    has_many :users, through: :user_passwords
+    has_many :user_passwords,
+             class_name: '::UserPassword::Record',
+             foreign_key: :password_id,
+             dependent: :destroy
+
+    has_many :users,
+             class_name: '::User::Record',
+             foreign_key: :user_id,
+             through: :user_passwords
 
     encrypts :username, deterministic: true
     encrypts :password
