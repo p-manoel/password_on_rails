@@ -2,6 +2,8 @@
 
 module Password
   class Record < ApplicationRecord
+    self.table_name = 'passwords'
+
     has_many :user_passwords, dependent: :destroy
     has_many :users, through: :user_passwords
 
