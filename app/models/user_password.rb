@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserPassword < ApplicationRecord
   belongs_to :user
   belongs_to :password
@@ -9,15 +11,15 @@ class UserPassword < ApplicationRecord
   attribute :role, default: :viewer
 
   def owner?
-    role == "owner"
+    role == 'owner'
   end
 
   def viewer?
-    role == "viewer"
+    role == 'viewer'
   end
 
   def editor?
-    role == "editor"
+    role == 'editor'
   end
 
   def editable?
