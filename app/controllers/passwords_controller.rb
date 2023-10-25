@@ -11,11 +11,11 @@ class PasswordsController < ApplicationController
   end
 
   def new
-    @password = Password.new
+    @password = Password::Record.new
   end
 
   def create
-    @password = Password.new(password_params)
+    @password = Password::Record.new(password_params)
     @password.user_passwords.new(user: current_user, role: :owner)
 
     if @password.save
